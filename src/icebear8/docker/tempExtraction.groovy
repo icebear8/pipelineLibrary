@@ -73,7 +73,6 @@ def setupPostTasks(buildProperties) {
     def postTasks = [:]
       
     for(itJob in buildProperties.dockerJobs) {
-      def isCurrentImageBranch = repositoryUtils.containsCurrentBranch(itJob.imageName)
       def imageId = "${buildProperties.dockerHub.user}/${itJob.imageName}"
       def localImageTag = "${env.BRANCH_NAME}_${env.BUILD_NUMBER}".replaceAll('/', '-')
       
