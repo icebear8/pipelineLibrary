@@ -1,5 +1,10 @@
 package icebear8.docker
 
+def createDummyStage(name, content) {
+  stage("${name}") {
+    echo "${content}"
+  }
+
 def buildImage(imageId, dockerFilePath, isRebuild) {
   def buildArgs = "${dockerFilePath}"
   
