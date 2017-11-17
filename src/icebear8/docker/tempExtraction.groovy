@@ -87,7 +87,7 @@ def setupPostTasks(buildProperties) {
         remoteImageTag = releaseTag != null ? releaseTag : dockerUtils.tagLatest()
       }
       
-//      postTasks[itJob.imageName] = removeImage(imageId, localImageTag, remoteImageTag)
+      postTasks[itJob.imageName] = removeImage(imageId, localImageTag, remoteImageTag)
     }
     
     return postTasks
