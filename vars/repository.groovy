@@ -1,11 +1,11 @@
-def latestBranch() {
+def branchLatest() {
   return "master"
 }
 
-def stableBranch() {
+def branchStable() {
   return "stable"
 }
 
-def releaseBranch() {
+def branchRelease() {
   return "release"
 }
