@@ -1,6 +1,6 @@
 package icebear8.docker;
 
-def dockerStep = new buildSteps()
+def dockerStep = new icebear8.docker.buildSteps()
 
 def createStages(buildProperties) {
   return
