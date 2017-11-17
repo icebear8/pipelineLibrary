@@ -1,4 +1,4 @@
-package icebear8.docker
+package icebear8.docker;
 
 def createDummyStage(name, content) {
   stage("${name}") {
