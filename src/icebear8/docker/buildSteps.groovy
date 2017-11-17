@@ -1,6 +1,6 @@
 package icebear8.docker
 
-def createDockerBuildStep(imageId, dockerFilePath, isRebuild) {
+def buildImage(imageId, dockerFilePath, isRebuild) {
   def buildArgs = "${dockerFilePath}"
   
   if (isRebuild == true) {
@@ -15,7 +15,7 @@ def createDockerBuildStep(imageId, dockerFilePath, isRebuild) {
   }
 }
 
-def createDockerPushStep(imageId, remoteTag) {
+def pushImage(imageId, remoteTag) {
   return {
     stage("Push image ${imageId} to ${remoteTag}") {
       echo "Push image: ${imageId} to remote with tag ${remoteTag}"
@@ -25,8 +25,8 @@ def createDockerPushStep(imageId, remoteTag) {
   }
 }
 
-def createRemoveImageStep(imageId, localImageTag, remoteImageTag) {
-return {
+def removeImage(imageId, localImageTag, remoteImageTag) {
+  return {
     stage("Remove image ${imageId}") {
       echo "Remove image: ${imageId}, tags: ${localImageTag}, ${remoteImageTag}"
       sh "docker rmi ${imageId}:${localImageTag}"
