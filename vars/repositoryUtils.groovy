@@ -20,6 +20,10 @@ def currentBuildBranch() {
   return branchLatest()
 }
 
+def containsCurrentBranch(name) {
+  return currentBuildBranch().contains("${name}")
+}
+
 def isLatestBranch() {
   return currentBuildBranch().contains(branchLatest())
 }
