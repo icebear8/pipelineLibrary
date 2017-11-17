@@ -1,15 +1,12 @@
 package icebear8.docker
 
-def buildProperties
 def buildTasks = [:]
 def pushTasks = [:]
 def postTasks = [:]
 
-def createSetupStage() {
+def createSetupStage(buildProperties) {
   return stage("Setup build") {
     echo "Setup build"
-    
-    buildProperties = readJSON file: "${BUILD_PROPERTIES_FILE}"
     
     echo "Properties: ${buildProperties}"
     
