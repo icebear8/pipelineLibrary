@@ -19,3 +19,15 @@ def currentBuildBranch() {
   
   return branchLatest()
 }
+
+def isLatestBranch() {
+  return currentBuildBranch().contains(branchLatest())
+}
+
+def isReleaseBranch() {
+  return currentBuildBranch().contains(branchRelease())
+}
+
+def isStableBranch() {
+  return currentBuildBranch().contains(branchStable())
+}
