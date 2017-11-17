@@ -1,61 +1,61 @@
 package icebear8.docker
 
-def buildTasks = [:]
-def pushTasks = [:]
-def postTasks = [:]
-
 def createSetupStage(buildProperties) {
-  return stage("Setup build") {
-    echo "Setup build"
-    
-    echo "Properties: ${buildProperties}"
-    
-    for(itJob in buildProperties.dockerJobs) {
-      
-      def isCurrentImageBranch = repositoryUtils.containsCurrentBranch(itJob.imageName)
-      def imageId = "${buildProperties.dockerHub.user}/${itJob.imageName}"
-      def localImageTag = "${env.BRANCH_NAME}_${env.BUILD_NUMBER}".replaceAll('/', '-')
-      def localImageId = "${imageId}:${localImageTag}"
+  return {
+    def buildTasks = [:]
+    def pushTasks = [:]
+    def postTasks = [:]
 
-      if (isBuildRequired(isCurrentImageBranch) == true) {
-        buildTasks[itJob.imageName] = dockerStep.buildImage(localImageId, itJob.dockerfilePath, isRebuildRequired())
-      }
+    stage("Setup build") {
+      echo "Setup build"
       
-      def remoteImageTag = dockerUtils.tagLocalBuild()
+      echo "Properties: ${buildProperties}"
       
-      if (repositoryUtils.isLatestBranch() == true) {
-        remoteImageTag = dockerUtils.tagLatest()
-      }
-      else if (repositoryUtils.isStableBranch() == true) {
-        remoteImageTag = dockerUtils.tagStable()
-      }
-      else if (repositoryUtils.isReleaseBranch() == true) {
-        def releaseTag = evaluateReleaseTag(repositoryUtils.currentBuildBranch(), itJob.imageName)
-        remoteImageTag = releaseTag != null ? releaseTag : dockerUtils.tagLatest()
-      }
-      
-      if (isPushRequired(isCurrentImageBranch) == true) {
-        pushTasks[itJob.imageName] = dockerStep.pushImage(localImageId, remoteImageTag)
-      }
-      
-      postTasks[itJob.imageName] = dockerStep.removeImage(imageId, localImageTag, remoteImageTag)
-    }
-  }
-}
+      for(itJob in buildProperties.dockerJobs) {
+        
+        def isCurrentImageBranch = repositoryUtils.containsCurrentBranch(itJob.imageName)
+        def imageId = "${buildProperties.dockerHub.user}/${itJob.imageName}"
+        def localImageTag = "${env.BRANCH_NAME}_${env.BUILD_NUMBER}".replaceAll('/', '-')
+        def localImageId = "${imageId}:${localImageTag}"
 
-def createParallelSteps() {
-  return docker.withServer(env.DEFAULT_DOCKER_HOST_CONNECTION, 'default-docker-host-credentials') {
-    try {
-      stage("Build") {
-        parallel buildTasks
-      }
-      stage("Push") {
-        parallel pushTasks
+        if (isBuildRequired(isCurrentImageBranch) == true) {
+          buildTasks[itJob.imageName] = dockerStep.buildImage(localImageId, itJob.dockerfilePath, isRebuildRequired())
+        }
+        
+        def remoteImageTag = dockerUtils.tagLocalBuild()
+        
+        if (repositoryUtils.isLatestBranch() == true) {
+          remoteImageTag = dockerUtils.tagLatest()
+        }
+        else if (repositoryUtils.isStableBranch() == true) {
+          remoteImageTag = dockerUtils.tagStable()
+        }
+        else if (repositoryUtils.isReleaseBranch() == true) {
+          def releaseTag = evaluateReleaseTag(repositoryUtils.currentBuildBranch(), itJob.imageName)
+          remoteImageTag = releaseTag != null ? releaseTag : dockerUtils.tagLatest()
+        }
+        
+        if (isPushRequired(isCurrentImageBranch) == true) {
+          pushTasks[itJob.imageName] = dockerStep.pushImage(localImageId, remoteImageTag)
+        }
+        
+        postTasks[itJob.imageName] = dockerStep.removeImage(imageId, localImageTag, remoteImageTag)
       }
     }
-    finally {
-      stage("Clean up") {
-        parallel postTasks
+
+    docker.withServer(env.DEFAULT_DOCKER_HOST_CONNECTION, 'default-docker-host-credentials') {
+      try {
+        stage("Build") {
+          parallel buildTasks
+        }
+        stage("Push") {
+          parallel pushTasks
+        }
+      }
+      finally {
+        stage("Clean up") {
+          parallel postTasks
+        }
       }
     }
   }
