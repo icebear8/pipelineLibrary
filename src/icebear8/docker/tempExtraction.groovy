@@ -7,21 +7,21 @@ def createStages(buildProperties) {
     docker.withServer(env.DEFAULT_DOCKER_HOST_CONNECTION, 'default-docker-host-credentials') {
       try {
         stage("Build") {
-          parallel setupBuildTasks()
+          parallel setupBuildTasks(buildProperties)
         }
         stage("Push") {
-          parallel setupPushTasks()
+          parallel setupPushTasks(buildProperties)
         }
       }
       finally {
         stage("Clean up") {
-          parallel setupPostTasks()
+          parallel setupPostTasks(buildProperties)
         }
       }
     }
 }
 
-def setupBuildTasks() {
+def setupBuildTasks(buildProperties) {
     def buildTasks = [:]
 
     for(itJob in buildProperties.dockerJobs) {
@@ -38,7 +38,7 @@ def setupBuildTasks() {
   return buildTasks
 }
 
-def setupPushTasks() {
+def setupPushTasks(buildProperties) {
   def pushTasks = [:]
 
   for(itJob in buildProperties.dockerJobs) {
@@ -69,7 +69,7 @@ def setupPushTasks() {
   return pushTasks
 }
 
-def setupPostTasks() {
+def setupPostTasks(buildProperties) {
     def postTasks = [:]
       
     for(itJob in buildProperties.dockerJobs) {
