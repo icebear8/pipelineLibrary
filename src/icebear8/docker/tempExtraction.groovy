@@ -1,7 +1,5 @@
 package icebear8.docker;
 
-def dockerStep = new icebear8.docker.buildSteps()
-
 def createStages(buildProperties) {
   return
     docker.withServer(env.DEFAULT_DOCKER_HOST_CONNECTION, 'default-docker-host-credentials') {
@@ -31,7 +29,7 @@ def setupBuildTasks(buildProperties) {
     def localImageId = "${imageId}:${localImageTag}"
 
     if (isBuildRequired(isCurrentImageBranch) == true) {
-      buildTasks[itJob.imageName] = dockerStep.buildImage(localImageId, itJob.dockerfilePath, isRebuildRequired())
+      buildTasks[itJob.imageName] = buildImage(localImageId, itJob.dockerfilePath, isRebuildRequired())
     }
   }
   
@@ -62,7 +60,7 @@ def setupPushTasks(buildProperties) {
     }
     
     if (isPushRequired(isCurrentImageBranch) == true) {
-      pushTasks[itJob.imageName] = dockerStep.pushImage(localImageId, remoteImageTag)
+      pushTasks[itJob.imageName] = pushImage(localImageId, remoteImageTag)
     }
   }
   
@@ -89,7 +87,7 @@ def setupPostTasks(buildProperties) {
         remoteImageTag = releaseTag != null ? releaseTag : dockerUtils.tagLatest()
       }
       
-      postTasks[itJob.imageName] = dockerStep.removeImage(imageId, localImageTag, remoteImageTag)
+      postTasks[itJob.imageName] = removeImage(imageId, localImageTag, remoteImageTag)
     }
     
     return postTasks
