@@ -50,26 +50,13 @@ def setupPostTasks(buildProperties) {
     def postTasks = [:]
       
     for(itJob in buildProperties.dockerJobs) {
-      
-      def remoteTag = dockerUtils.getTagLocalBuild()
-      
-      if (repositoryUtils.isLatestBranch() == true) {
-        remoteTag = dockerUtils.getTagLatest()
-      }
-      else if (repositoryUtils.isStableBranch() == true) {
-        remoteTag = dockerUtils.getTagStable()
-      }
-      else if (repositoryUtils.isReleaseBranch() == true) {
-        def releaseTag = evaluateReleaseTag(repositoryUtils.currentBuildBranch(), itJob.imageName)
-        remoteTag = releaseTag != null ? releaseTag : dockerUtils.getTagLatest()
-      }
-      
+
       def localTag = dockerUtils.getCurrentBuildTag();
       
       postTasks[itJob.imageName] = dockerImage.removeLocal {
         imageId = "${evaluateImageId(buildProperties.dockerHub.user, itJob.imageName)}"
         localImageTag = "${localTag}"
-        remoteImageTag = "${remoteTag}"
+        remoteImageTag = "${evaluateRemoteTag()}"
       }
     }
     
@@ -78,6 +65,23 @@ def setupPostTasks(buildProperties) {
 
 def evaluateImageId(user, image) {
   return "${user}/${image}"
+}
+
+def evaluateRemoteTag() {
+  def remoteTag = dockerUtils.getTagLocalBuild()
+      
+  if (repositoryUtils.isLatestBranch() == true) {
+    remoteTag = dockerUtils.getTagLatest()
+  }
+  else if (repositoryUtils.isStableBranch() == true) {
+    remoteTag = dockerUtils.getTagStable()
+  }
+  else if (repositoryUtils.isReleaseBranch() == true) {
+    def releaseTag = evaluateReleaseTag(repositoryUtils.currentBuildBranch(), itJob.imageName)
+    remoteTag = releaseTag != null ? releaseTag : dockerUtils.getTagLatest()
+  }
+  
+  return remoteTag
 }
 
 def isBuildRequired(isCurrentImageBranch) {
