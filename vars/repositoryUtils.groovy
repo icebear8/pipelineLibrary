@@ -11,29 +11,20 @@ def getBranchRelease() {
   return "release"
 }
 
-def getCurrentBuildBranch() {
-  
-  if (env.BRANCH_NAME != null) {
-    return env.BRANCH_NAME
-  }
-  
-  return getBranchLatest()
-}
-
 def isLatestBranch() {
-  return getCurrentBuildBranch().contains(getBranchLatest())
+  return buildUtils.getCurrentBuildBranch().contains(getBranchLatest())
 }
 
 def isReleaseBranch() {
-  return getCurrentBuildBranch().contains(getBranchRelease())
+  return buildUtils.getCurrentBuildBranch().contains(getBranchRelease())
 }
 
 def isStableBranch() {
-  return getCurrentBuildBranch().contains(getBranchStable())
+  return buildUtils.getCurrentBuildBranch().contains(getBranchStable())
 }
 
 def containsCurrentBranch(name) {
-  return getCurrentBuildBranch().contains("${name}")
+  return buildUtils.getCurrentBuildBranch().contains("${name}")
 }
 
 // Creates a checkout stage with the following parameters
@@ -48,11 +39,11 @@ def checkoutCurrentBranch(body) {
   body()
 
   stage("${config.stageName}") {
-    echo "Checkout branch: ${getCurrentBuildBranch()}"
+    echo "Checkout branch: ${buildUtils.getCurrentBuildBranch()}"
 
     checkout([
       $class: 'GitSCM',
-      branches: [[name: "*/${getCurrentBuildBranch()}"]],
+      branches: [[name: "*/${buildUtils.getCurrentBuildBranch()}"]],
       doGenerateSubmoduleConfigurations: false,
       extensions: [[$class: 'CleanBeforeCheckout'], [$class: 'PruneStaleBranch']],
       submoduleCfg: [],
