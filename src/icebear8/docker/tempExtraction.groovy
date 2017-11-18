@@ -20,9 +20,9 @@ def createStages(buildProperties) {
 }
 
 def setupBuildTasks(buildProperties) {
-    def buildTasks = [:]
+  def buildTasks = [:]
 
-    for(itJob in buildProperties.dockerJobs) {
+  for(itJob in buildProperties.dockerJobs) {
     def isCurrentImageBranch = repositoryUtils.containsCurrentBranch(itJob.imageName)
     def imageId = "${buildProperties.dockerHub.user}/${itJob.imageName}"
     def localImageTag = "${env.BRANCH_NAME}_${env.BUILD_NUMBER}".replaceAll('/', '-')
