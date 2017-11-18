@@ -10,3 +10,7 @@ def getTagStable() {
 def getTagLocalBuild() {
   return "build"
 }
+
+def getCurrentBuildTag() {
+  return "${buildUtils.getCurrentBuildBranch()}_${buildUtils.getCurrentBuildNumber()}".replaceAll('/', '-')
+}

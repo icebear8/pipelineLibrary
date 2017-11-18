@@ -6,8 +6,7 @@ def setupBuildTasks(buildProperties) {
   for(itJob in buildProperties.dockerJobs) {
     def isCurrentImageBranch = repositoryUtils.containsCurrentBranch(itJob.imageName)
     def imageId = "${buildProperties.dockerHub.user}/${itJob.imageName}"
-    def localImageTag = "${env.BRANCH_NAME}_${env.BUILD_NUMBER}".replaceAll('/', '-')
-    def localImageId = "${imageId}:${localImageTag}"
+    def localImageId = "${imageId}:${dockerUtils.getCurrentBuiltTag()}"
 
     if (isBuildRequired(isCurrentImageBranch) == true) {
       buildTasks[itJob.imageName] = buildImage(localImageId, itJob.dockerfilePath, isRebuildRequired())
@@ -24,8 +23,7 @@ def setupPushTasks(buildProperties) {
     
     def isCurrentImageBranch = repositoryUtils.containsCurrentBranch(itJob.imageName)
     def imageId = "${buildProperties.dockerHub.user}/${itJob.imageName}"
-    def localImageTag = "${env.BRANCH_NAME}_${env.BUILD_NUMBER}".replaceAll('/', '-')
-    def localImageId = "${imageId}:${localImageTag}"
+    def localImageId = "${imageId}:${dockerUtils.getCurrentBuiltTag()}"
 
     def remoteImageTag = dockerUtils.getTagLocalBuild()
     
@@ -66,7 +64,7 @@ def setupPostTasks(buildProperties) {
         remoteTag = releaseTag != null ? releaseTag : dockerUtils.getTagLatest()
       }
       
-      def localTag = "${buildUtils.getCurrentBuildBranch()}_${buildUtils.getCurrentBuildNumber()}".replaceAll('/', '-')
+      def localTag = dockerUtils.getCurrentBuiltTag()
       
       postTasks[itJob.imageName] = dockerImage.removeLocal {
         imageId = "${buildProperties.dockerHub.user}/${itJob.imageName}"
