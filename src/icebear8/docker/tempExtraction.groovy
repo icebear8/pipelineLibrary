@@ -24,22 +24,9 @@ def setupPushTasks(buildProperties) {
     def isCurrentImageBranch = repositoryUtils.containsCurrentBranch(itJob.imageName)
     def imageId = "${buildProperties.dockerHub.user}/${itJob.imageName}"
     def localImageId = "${imageId}:${dockerUtils.getCurrentBuildTag()}"
-
-    def remoteImageTag = dockerUtils.getTagLocalBuild()
-    
-    if (repositoryUtils.isLatestBranch() == true) {
-      remoteImageTag = dockerUtils.getTagLatest()
-    }
-    else if (repositoryUtils.isStableBranch() == true) {
-      remoteImageTag = dockerUtils.getTagStable()
-    }
-    else if (repositoryUtils.isReleaseBranch() == true) {
-      def releaseTag = evaluateReleaseTag(repositoryUtils.currentBuildBranch(), itJob.imageName)
-      remoteImageTag = releaseTag != null ? releaseTag : dockerUtils.getTagLatest()
-    }
-    
+  
     if (isPushRequired(isCurrentImageBranch) == true) {
-      pushTasks[itJob.imageName] = pushImage(localImageId, remoteImageTag)
+      pushTasks[itJob.imageName] = pushImage(localImageId, evaluateRemoteTag())
     }
   }
   
