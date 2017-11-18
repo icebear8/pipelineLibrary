@@ -1,39 +1,39 @@
 
-def branchLatest() {
+def getBranchLatest() {
   return "master"
 }
 
-def branchStable() {
+def getBranchStable() {
   return "stable"
 }
 
-def branchRelease() {
+def getBranchRelease() {
   return "release"
 }
 
-def currentBuildBranch() {
+def getCurrentBuildBranch() {
   
   if (env.BRANCH_NAME != null) {
     return env.BRANCH_NAME
   }
   
-  return branchLatest()
+  return getBranchLatest()
+}
+
+def isLatestBranch() {
+  return currentBuildBranch().contains(getBranchLatest())
+}
+
+def isReleaseBranch() {
+  return currentBuildBranch().contains(getBranchRelease())
+}
+
+def isStableBranch() {
+  return currentBuildBranch().contains(getBranchStable())
 }
 
 def containsCurrentBranch(name) {
   return currentBuildBranch().contains("${name}")
-}
-
-def isLatestBranch() {
-  return currentBuildBranch().contains(branchLatest())
-}
-
-def isReleaseBranch() {
-  return currentBuildBranch().contains(branchRelease())
-}
-
-def isStableBranch() {
-  return currentBuildBranch().contains(branchStable())
 }
 
 // Creates a checkout stage with the following parameters
