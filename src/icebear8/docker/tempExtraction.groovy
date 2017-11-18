@@ -67,13 +67,17 @@ def setupPostTasks(buildProperties) {
       def localTag = dockerUtils.getCurrentBuildTag();
       
       postTasks[itJob.imageName] = dockerImage.removeLocal {
-        imageId = "${buildProperties.dockerHub.user}/${itJob.imageName}"
+        imageId = "${evaluateImageId(buildProperties.dockerHub.user, itJob.imageName)}"
         localImageTag = "${localTag}"
         remoteImageTag = "${remoteTag}"
       }
     }
     
     return postTasks
+}
+
+def evaluateImageId(user, image) {
+  return "${user}/${image}"
 }
 
 def isBuildRequired(isCurrentImageBranch) {
