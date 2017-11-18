@@ -1,24 +1,5 @@
 package icebear8.docker;
 
-def createStages(buildProperties) {
-  return
-    docker.withServer(env.DEFAULT_DOCKER_HOST_CONNECTION, 'default-docker-host-credentials') {
-      try {
-        stage("Build") {
-          parallel setupBuildTasks(buildProperties)
-        }
-        stage("Push") {
-          parallel setupPushTasks(buildProperties)
-        }
-      }
-      finally {
-        stage("Clean up") {
-          parallel setupPostTasks(buildProperties)
-        }
-      }
-    }
-}
-
 def setupBuildTasks(buildProperties) {
   def buildTasks = [:]
 
