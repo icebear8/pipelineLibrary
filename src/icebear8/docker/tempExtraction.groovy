@@ -146,3 +146,5 @@ def pushImage(imageId, remoteTag) {
     }
   }
 }
+
+return this;
