@@ -38,10 +38,9 @@ def isStableBranch() {
 
 // Creates a checkout stage with the following parameters
 // stageName
-// branchName
 // repoUrl
 // repoCredentials
-def checkoutStage(body) {
+def checkoutCurrentBranch(body) {
 
   def config = [:]
   body.resolveStrategy = Closure.DELEGATE_FIRST
@@ -49,11 +48,11 @@ def checkoutStage(body) {
   body()
 
   stage("${config.stageName}") {
-    echo "Checkout branch: ${config.branchName}"
+    echo "Checkout branch: ${currentBuildBranch()}"
 
     checkout([
       $class: 'GitSCM',
-      branches: [[name: "*/${config.branchName}"]],
+      branches: [[name: "*/${currentBuildBranch()}"]],
       doGenerateSubmoduleConfigurations: false,
       extensions: [[$class: 'CleanBeforeCheckout'], [$class: 'PruneStaleBranch']],
       submoduleCfg: [],
