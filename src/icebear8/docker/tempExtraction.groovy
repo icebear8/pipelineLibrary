@@ -27,17 +27,17 @@ def setupPushTasks(buildProperties) {
     def localImageTag = "${env.BRANCH_NAME}_${env.BUILD_NUMBER}".replaceAll('/', '-')
     def localImageId = "${imageId}:${localImageTag}"
 
-    def remoteImageTag = dockerUtils.tagLocalBuild()
+    def remoteImageTag = dockerUtils.getTagLocalBuild()
     
     if (repositoryUtils.isLatestBranch() == true) {
-      remoteImageTag = dockerUtils.tagLatest()
+      remoteImageTag = dockerUtils.getTagLatest()
     }
     else if (repositoryUtils.isStableBranch() == true) {
-      remoteImageTag = dockerUtils.tagStable()
+      remoteImageTag = dockerUtils.getTagStable()
     }
     else if (repositoryUtils.isReleaseBranch() == true) {
       def releaseTag = evaluateReleaseTag(repositoryUtils.currentBuildBranch(), itJob.imageName)
-      remoteImageTag = releaseTag != null ? releaseTag : dockerUtils.tagLatest()
+      remoteImageTag = releaseTag != null ? releaseTag : dockerUtils.getTagLatest()
     }
     
     if (isPushRequired(isCurrentImageBranch) == true) {
@@ -55,17 +55,17 @@ def setupPostTasks(buildProperties) {
       def imageId = "${buildProperties.dockerHub.user}/${itJob.imageName}"
       def localImageTag = "${env.BRANCH_NAME}_${env.BUILD_NUMBER}".replaceAll('/', '-')
       
-      def remoteImageTag = dockerUtils.tagLocalBuild()
+      def remoteTag = dockerUtils.getTagLocalBuild()
       
       if (repositoryUtils.isLatestBranch() == true) {
-        remoteImageTag = dockerUtils.tagLatest()
+        remoteTag = dockerUtils.getTagLatest()
       }
       else if (repositoryUtils.isStableBranch() == true) {
-        remoteImageTag = dockerUtils.tagStable()
+        remoteTag = dockerUtils.getTagStable()
       }
       else if (repositoryUtils.isReleaseBranch() == true) {
         def releaseTag = evaluateReleaseTag(repositoryUtils.currentBuildBranch(), itJob.imageName)
-        remoteImageTag = releaseTag != null ? releaseTag : dockerUtils.tagLatest()
+        remoteTag = releaseTag != null ? releaseTag : dockerUtils.getTagLatest()
       }
       
       postTasks[itJob.imageName] = removeImage(imageId, localImageTag, remoteImageTag)

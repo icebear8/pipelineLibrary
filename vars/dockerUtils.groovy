@@ -1,12 +1,12 @@
 
-def tagLatest() {
+def getTagLatest() {
   return "latest"
 }
 
-def tagStable() {
+def getTagStable() {
   return "stable"
 }
 
-def tagLocalBuild() {
+def getTagLocalBuild() {
   return "build"
 }
