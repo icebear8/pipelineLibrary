@@ -150,13 +150,3 @@ def pushImage(imageId, remoteTag) {
     }
   }
 }
-
-def removeImage(imageId, localImageTag, remoteImageTag) {
-  return {
-    stage("Remove image ${imageId}") {
-      echo "Remove image: ${imageId}, tags: ${localImageTag}, ${remoteImageTag}"
-      sh "docker rmi ${imageId}:${localImageTag}"
-      sh "docker rmi ${imageId}:${remoteImageTag}"
-    }
-  }
-}
