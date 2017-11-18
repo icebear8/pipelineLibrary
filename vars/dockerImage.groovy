@@ -27,7 +27,7 @@ def build(body) {
 // Pushes an image to the docker hub with the following parameters:
 // imageId
 // remoteTag
-def push(imageId, remoteTag) {
+def push(body) {
   
   def config = [:]
   body.resolveStrategy = Closure.DELEGATE_FIRST
@@ -47,7 +47,7 @@ def push(imageId, remoteTag) {
 // imageId
 // localImageTag
 // remoteImageTag
-def removeLocal(imageId, localImageTag, remoteImageTag) {
+def removeLocal(body) {
   
   def config = [:]
   body.resolveStrategy = Closure.DELEGATE_FIRST
