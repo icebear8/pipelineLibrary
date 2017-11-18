@@ -21,19 +21,19 @@ def getCurrentBuildBranch() {
 }
 
 def isLatestBranch() {
-  return currentBuildBranch().contains(getBranchLatest())
+  return getCurrentBuildBranch().contains(getBranchLatest())
 }
 
 def isReleaseBranch() {
-  return currentBuildBranch().contains(getBranchRelease())
+  return getCurrentBuildBranch().contains(getBranchRelease())
 }
 
 def isStableBranch() {
-  return currentBuildBranch().contains(getBranchStable())
+  return getCurrentBuildBranch().contains(getBranchStable())
 }
 
 def containsCurrentBranch(name) {
-  return currentBuildBranch().contains("${name}")
+  return getCurrentBuildBranch().contains("${name}")
 }
 
 // Creates a checkout stage with the following parameters
@@ -48,11 +48,11 @@ def checkoutCurrentBranch(body) {
   body()
 
   stage("${config.stageName}") {
-    echo "Checkout branch: ${currentBuildBranch()}"
+    echo "Checkout branch: ${getCurrentBuildBranch()}"
 
     checkout([
       $class: 'GitSCM',
-      branches: [[name: "*/${currentBuildBranch()}"]],
+      branches: [[name: "*/${getCurrentBuildBranch()}"]],
       doGenerateSubmoduleConfigurations: false,
       extensions: [[$class: 'CleanBeforeCheckout'], [$class: 'PruneStaleBranch']],
       submoduleCfg: [],
