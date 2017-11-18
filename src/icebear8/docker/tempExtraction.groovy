@@ -66,9 +66,11 @@ def setupPostTasks(buildProperties) {
         remoteTag = releaseTag != null ? releaseTag : dockerUtils.getTagLatest()
       }
       
+      def localTag = "${env.BRANCH_NAME}_${env.BUILD_NUMBER}".replaceAll('/', '-')
+      
       postTasks[itJob.imageName] = dockerImage.removeLocal {
         imageId = "${buildProperties.dockerHub.user}/${itJob.imageName}"
-        localImageTag = "${env.BRANCH_NAME}_${env.BUILD_NUMBER}".replaceAll('/', '-')
+        localImageTag = "${localTag}"
         remoteImageTag = "${remoteTag}"
       }
     }
