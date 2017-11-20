@@ -42,9 +42,7 @@ def setupPostTasks(buildProperties) {
         "evaluateImageId(buildProperties.dockerHub.user, itJob.imageName)",
         "dockerUtils.getCurrentBuildTag()",
         "evaluateRemoteTag()")
-      }
     }
-
     return postTasks
 }
 
