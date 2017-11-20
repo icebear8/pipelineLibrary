@@ -11,7 +11,7 @@ def build(body) {
   body()
 
   def buildArgs = "${config.dockerFilePath}"
-  
+
   if (config.isRebuild == true) {
     buildArgs = "--no-cache --rm ${config.dockerFilePath}"
   }
@@ -28,7 +28,7 @@ def build(body) {
 // imageId
 // remoteTag
 def push(body) {
-  
+
   def config = [:]
   body.resolveStrategy = Closure.DELEGATE_FIRST
   body.delegate = config
@@ -37,7 +37,7 @@ def push(body) {
   return {
     stage("Push image ${config.imageId} to ${config.remoteTag}") {
       echo "Push image: ${config.imageId} to remote with tag ${config.remoteTag}"
-      
+
       docker.image("${config.imageId}").push("${config.remoteTag}")
     }
   }
@@ -48,7 +48,7 @@ def push(body) {
 // localImageTag
 // remoteImageTag
 def removeLocal(body) {
-  
+
   def config = [:]
   body.resolveStrategy = Closure.DELEGATE_FIRST
   body.delegate = config
@@ -59,6 +59,16 @@ def removeLocal(body) {
       echo "Remove image: ${config.imageId}, tags: ${config.localImageTag}, ${config.remoteImageTag}"
       sh "docker rmi ${config.imageId}:${config.localImageTag}"
       sh "docker rmi ${config.imageId}:${config.remoteImageTag}"
+    }
+  }
+}
+
+def removeLocalFunc(imageId, localImageTag, remoteImageTag) {
+  return {
+    stage("Remove image ${imageId}") {
+      echo "Remove image: ${imageId}, tags: ${localImageTag}, ${remoteImageTag}"
+      sh "docker rmi ${imageId}:${localImageTag}"
+      sh "docker rmi ${imageId}:${remoteImageTag}"
     }
   }
 }

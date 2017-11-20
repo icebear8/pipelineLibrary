@@ -38,10 +38,10 @@ def setupPostTasks(buildProperties) {
 
     for(itJob in buildProperties.dockerJobs) {
 
-      postTasks[itJob.imageName] = dockerImage.removeLocal {
-        imageId = "${evaluateImageId(buildProperties.dockerHub.user, itJob.imageName)}"
-        localImageTag = "${dockerUtils.getCurrentBuildTag()}"
-        remoteImageTag = "${evaluateRemoteTag()}"
+      postTasks[itJob.imageName] = dockerImage.removeLocalFunc(
+        "evaluateImageId(buildProperties.dockerHub.user, itJob.imageName)",
+        "dockerUtils.getCurrentBuildTag()",
+        "evaluateRemoteTag()")
       }
     }
 
