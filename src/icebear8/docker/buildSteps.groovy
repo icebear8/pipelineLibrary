@@ -40,16 +40,6 @@ def isRebuildRequired() {
   return false
 }
 
-def pushImage(imageId, remoteTag) {
-  return {
-    stage("Push image ${imageId} to ${remoteTag}") {
-      echo "Push image: ${imageId} to remote with tag ${remoteTag}"
-
-      docker.image("${imageId}").push("${remoteTag}")
-    }
-  }
-}
-
 def removeImage(imageId, localImageTag, remoteImageTag) {
   return {
     stage("Remove image ${imageId}") {

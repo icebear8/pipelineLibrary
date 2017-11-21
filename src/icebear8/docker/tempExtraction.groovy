@@ -1,38 +1,5 @@
 package icebear8.docker;
 
-def setupBuildTasks(buildProperties) {
-  def buildTasks = [:]
-
-  for(itJob in buildProperties.dockerJobs) {
-    def isCurrentImageBranch = repositoryUtils.containsCurrentBranch(itJob.imageName)
-    def imageId = "${buildProperties.dockerHub.user}/${itJob.imageName}"
-    def localImageId = "${imageId}:${dockerUtils.getCurrentBuildTag()}"
-
-    if (isBuildRequired(isCurrentImageBranch) == true) {
-      buildTasks[itJob.imageName] = buildImage(localImageId, itJob.dockerfilePath, isRebuildRequired())
-    }
-  }
-
-  return buildTasks
-}
-
-def setupPushTasks(buildProperties) {
-  def pushTasks = [:]
-
-  for(itJob in buildProperties.dockerJobs) {
-
-    def isCurrentImageBranch = repositoryUtils.containsCurrentBranch(itJob.imageName)
-    def imageId = "${buildProperties.dockerHub.user}/${itJob.imageName}"
-    def localImageId = "${imageId}:${dockerUtils.getCurrentBuildTag()}"
-
-    if (isPushRequired(isCurrentImageBranch) == true) {
-      pushTasks[itJob.imageName] = pushImage(localImageId, evaluateRemoteTag())
-    }
-  }
-
-  return pushTasks
-}
-
 def setupPostTasks(buildProperties) {
     def postTasks = [:]
 
