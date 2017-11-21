@@ -14,16 +14,3 @@ def pushImage(user, imageName) {
     }
   }
 }
-
-def isPushRequired(imageName) {
-  def isCurrentImageBranch = repositoryUtils.containsCurrentBranch(imageName)
-
-  if (((repositoryUtils.isReleaseBranch() == false) && (repositoryUtils.isStableBranch() == false)) || (repositoryUtils.isLatestBranch() == true)) {
-    return true
-  }
-  else if ((isCurrentImageBranch == true) && ((repositoryUtils.isReleaseBranch() == true) || (repositoryUtils.isStableBranch() == true))) {
-    return true
-  }
-
-  return false
-}

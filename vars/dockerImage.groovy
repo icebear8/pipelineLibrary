@@ -9,10 +9,12 @@ def setupBuildTasks(body) {
   body()
 
   def dockerBuild = new icebear8.docker.buildSteps()
+  def utils = new icebear8.docker.utils()
+
   def buildTasks = [:]
 
   for(itJob in config.buildJobs) {
-    if (dockerBuild.isBuildRequired(itJob.imageName) == true) {
+    if (utils.isImageProcessingRequired(itJob.imageName)) {
       buildTasks[itJob.imageName] = dockerBuild.buildImage(config.dockerRegistryUser, itJob.imageName, itJob.dockerfilePath)
     }
   }
@@ -30,11 +32,12 @@ def setupPushTasks(body) {
   body()
 
   def dockerPush = new icebear8.docker.pushSteps()
+  def utils = new icebear8.docker.utils()
 
   def pushTasks = [:]
 
   for(itJob in config.buildJobs) {
-    if (dockerPush.isPushRequired(itJob.imageName) == true) {
+    if (utils.isImageProcessingRequired(itJob.imageName)) {
       pushTasks[itJob.imageName] = dockerPush.pushImage(config.dockerRegistryUser, itJob.imageName)
     }
   }

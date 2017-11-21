@@ -19,19 +19,6 @@ def buildImage(user, imageName, dockerFilePath) {
   }
 }
 
-def isBuildRequired(imageName) {
-  def isCurrentImageBranch = repositoryUtils.containsCurrentBranch(imageName)
-
-  if (isCurrentImageBranch == true) {
-    return true
-  }
-  else if ((repositoryUtils.isStableBranch() == false) && (repositoryUtils.isReleaseBranch() == false)) {
-    return true
-  }
-
-  return false
-}
-
 def isRebuildRequired() {
   if ((repositoryUtils.isLatestBranch() == true) || (repositoryUtils.isStableBranch() == true) || (repositoryUtils.isReleaseBranch() == true)) {
     return true

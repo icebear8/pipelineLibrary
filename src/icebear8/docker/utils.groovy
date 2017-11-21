@@ -31,3 +31,12 @@ def evaluateReleaseTag(releaseBranch, imageName) {
 
   return releaseBranch.substring(indexOfImage + imageName.length() + 1) // +1 because of additional sign between image id and release tag
 }
+
+def isImageProcessingRequired(imageName) {
+  // for release or stable branches only process if image name is mentioned in the branch name
+  if ((repositoryUtils.isStableBranch() == true) || (repositoryUtils.isReleaseBranch() == true)) {
+    return repositoryUtils.containsCurrentBranch(imageName)
+  }
+
+  return true
+}
