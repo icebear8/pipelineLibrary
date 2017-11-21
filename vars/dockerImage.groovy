@@ -35,7 +35,7 @@ def setupPushTasks(body) {
 
   for(itJob in config.buildJobs) {
     if (dockerPush.isPushRequired(itJob.imageName) == true) {
-      pushTasks[itJob.imageName] = dockerPush.pushImage(localImageId, evaluateRemoteTag())
+      pushTasks[itJob.imageName] = dockerPush.pushImage(config.dockerRegistryUser, itJob.imageName)
     }
   }
 
