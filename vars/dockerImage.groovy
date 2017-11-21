@@ -45,6 +45,29 @@ def setupPushTasks(body) {
   return pushTasks
 }
 
+// Prepares multiple docker images remove tasks wity parameters
+// dockerRegistryUser
+// buildJobs
+def setupRemoveTasks(body) {
+  def config = [:]
+  body.resolveStrategy = Closure.DELEGATE_FIRST
+  body.delegate = config
+  body()
+
+  def dockerRemove = new icebear8.docker.removeSteps()
+  def utils = new icebear8.docker.utils()
+
+  def removeTasks = [:]
+
+  for(itJob in config.buildJobs) {
+    if (utils.isImageProcessingRequired(itJob.imageName)) {
+      removeTasks[itJob.imageName] = dockerRemove.removeImage(config.dockerRegistryUser, itJob.imageName)
+    }
+  }
+
+  return removeTasks
+}
+
 // Removes the local images with the following parameters:
 // imageId
 // localImageTag
