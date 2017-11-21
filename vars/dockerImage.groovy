@@ -1,5 +1,5 @@
 
-// Prepares multiple docker image build postTasks with the parameters
+// Prepares multiple docker image build with the parameters
 // dockerRegistryUser
 // buildJobs
 def setupBuildTasks(body) {
@@ -18,6 +18,28 @@ def setupBuildTasks(body) {
   }
 
   return buildTasks
+}
+
+// Prepares multiple docker images push tasks wity parameters
+// dockerRegistryUser
+// buildJobs
+def setupPushTasks(body) {
+  def config = [:]
+  body.resolveStrategy = Closure.DELEGATE_FIRST
+  body.delegate = config
+  body()
+
+  def dockerPush = new icebear8.docker.pushSteps()
+
+  def pushTasks = [:]
+
+  for(itJob in config.buildJobs) {
+    if (dockerPush.isPushRequired(itJob.imageName) == true) {
+      pushTasks[itJob.imageName] = dockerPush.pushImage(localImageId, evaluateRemoteTag())
+    }
+  }
+
+  return pushTasks
 }
 
 
