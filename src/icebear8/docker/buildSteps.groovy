@@ -1,6 +1,9 @@
 package icebear8.docker;
 
 def buildImage(user, imageName, dockerFilePath) {
+
+  def utils = new icebear8.docker.utils()
+
   def imageId = "${user}/${imageName}:${utils.evaluateJobBuildTag()}"
   def buildArgs = "${dockerFilePath}"
 
