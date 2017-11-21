@@ -1,7 +1,7 @@
 package icebear8.docker;
 
 def buildImage(user, imageName, dockerFilePath) {
-  def imageId = "${user}/${imageName}:${dockerUtils.getCurrentBuildTag()}"
+  def imageId = "${user}/${imageName}:${utils.evaluateJobBuildTag()}"
   def buildArgs = "${dockerFilePath}"
 
   if (isBuildRequired(imageName) == true) {
