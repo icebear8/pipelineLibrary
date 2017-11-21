@@ -9,14 +9,9 @@ def setupBuildTasks(body) {
   body()
 
   def dockerBuild = new icebear8.docker.buildSteps()
-
   def buildTasks = [:]
 
   for(itJob in config.buildJobs) {
-    def isCurrentImageBranch = repositoryUtils.containsCurrentBranch(itJob.imageName)
-    def imageId = "${config.dockerRegistryUser}/${itJob.imageName}"
-    def localImageId = "${imageId}:${dockerUtils.getCurrentBuildTag()}"
-
     if (dockerBuild.isBuildRequired(itJob.imageName) == true) {
       buildTasks[itJob.imageName] = dockerBuild.buildImage(config.dockerRegistryUser, itJob.imageName, itJob.dockerfilePath)
     }
