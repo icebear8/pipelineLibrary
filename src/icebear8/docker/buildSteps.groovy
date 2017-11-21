@@ -7,7 +7,7 @@ def buildImage(user, imageName, dockerFilePath) {
   def imageId = "${user}/${imageName}:${utils.evaluateJobBuildTag()}"
   def buildArgs = "${dockerFilePath}"
 
-  if (isBuildRequired(imageName) == true) {
+  if (isRebuildRequired() == true) {
     buildArgs = "--no-cache --rm ${dockerFilePath}"
   }
 
