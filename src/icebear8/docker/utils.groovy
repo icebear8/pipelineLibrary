@@ -26,7 +26,7 @@ def evaluateRemoteTag(imageName) {
     remoteTag = getTagStable()
   }
   else if (repositoryUtils.isReleaseBranch() == true) {
-    def releaseTag = evaluateReleaseTag(repositoryUtils.currentBuildBranch(), imageName)
+    def releaseTag = evaluateReleaseTag(buildUtils.currentBuildBranch(), imageName)
     remoteTag = releaseTag != null ? releaseTag : getTagLatest()
   }
 
