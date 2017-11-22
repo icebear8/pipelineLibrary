@@ -1,21 +1,33 @@
 package icebear8.docker
 
+def getTagLatest() {
+  return "latest"
+}
+
+def getTagStable() {
+  return "stable"
+}
+
+def getTagBuild() {
+  return "build"
+}
+
 def evaluateJobBuildTag() {
   return "${buildUtils.getCurrentBuildBranch()}_${buildUtils.getCurrentBuildNumber()}".replaceAll('/', '-')
 }
 
 def evaluateRemoteTag(imageName) {
-  def remoteTag = dockerUtils.getTagLocalBuild()
+  def remoteTag = getTagLocalBuild()
 
   if (repositoryUtils.isLatestBranch() == true) {
-    remoteTag = dockerUtils.getTagLatest()
+    remoteTag = getTagLatest()
   }
   else if (repositoryUtils.isStableBranch() == true) {
-    remoteTag = dockerUtils.getTagStable()
+    remoteTag = getTagStable()
   }
   else if (repositoryUtils.isReleaseBranch() == true) {
     def releaseTag = evaluateReleaseTag(repositoryUtils.currentBuildBranch(), imageName)
-    remoteTag = releaseTag != null ? releaseTag : dockerUtils.getTagLatest()
+    remoteTag = releaseTag != null ? releaseTag : getTagLatest()
   }
 
   return remoteTag
