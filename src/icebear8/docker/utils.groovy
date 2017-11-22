@@ -17,7 +17,7 @@ def evaluateJobBuildTag() {
 }
 
 def evaluateRemoteTag(imageName) {
-  def remoteTag = getTagLocalBuild()
+  def remoteTag = getTagBuild()
 
   if (repositoryUtils.isLatestBranch() == true) {
     remoteTag = getTagLatest()
