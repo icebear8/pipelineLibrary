@@ -41,7 +41,8 @@ def evaluateReleaseTag(releaseBranch, imageName) {
     return null // exit if no valid release tag could be found
   }
 
-  return releaseBranch.substring(indexOfImage + imageName.length() + 1) // +1 because of additional sign between image id and release tag
+  def branchTag = releaseBranch.substring(indexOfImage + imageName.length() + 1) // +1 because of additional sign between image id and release tag
+  return branchTag + "-b${buildUtils.getCurrentBuildNumber()}"
 }
 
 def isImageProcessingRequired(imageName) {
