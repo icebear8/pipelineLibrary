@@ -13,7 +13,7 @@ def getTagBuild() {
 }
 
 def evaluateJobBuildTag() {
-  return "${buildUtils.getCurrentBuildBranch()}_${buildUtils.getCurrentBuildNumber()}".replaceAll('/', '-')
+  return "${buildUtils.getCurrentBuildBranch()}-b${buildUtils.getCurrentBuildNumber()}".replaceAll('/', '-')
 }
 
 def evaluateRemoteTag(imageName) {
