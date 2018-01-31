@@ -29,6 +29,61 @@ def containsCurrentBranch(name) {
 
 // Creates a checkout stage with the following parameters
 // stageName
+// branchName
+// repoUrl
+// repoCredentials
+def checkoutBranch(body) {
+
+  def config = [:]
+  body.resolveStrategy = Closure.DELEGATE_FIRST
+  body.delegate = config
+  body()
+
+  stage("${config.stageName}") {
+    echo "Checkout branch: ${config.branchName}"
+    echo "pipelineLibrary@master"
+
+    checkout([
+      $class: 'GitSCM',
+      branches: [[name: "*/${config.branchName}"]],
+      doGenerateSubmoduleConfigurations: false,
+      extensions: [[$class: 'CleanBeforeCheckout'], [$class: 'PruneStaleBranch']],
+      submoduleCfg: [],
+      userRemoteConfigs: [[url: "${config.repoUrl}", credentialsId: "${config.repoCredentials}"]]])
+  }
+}
+
+// Creates a checkout stage with the following parameters
+// stageName
+// branchName
+// subDirectory
+// repoUrl
+// repoCredentials
+def checkoutBranchToSubdir(body) {
+  def config = [:]
+  body.resolveStrategy = Closure.DELEGATE_FIRST
+  body.delegate = config
+  body()
+
+  stage("${config.stageName}") {
+    echo "Checkout branch: ${config.branchName}"
+    echo "pipelineLibrary@master"
+
+    checkout([
+      $class: 'GitSCM',
+      branches: [[name: "*/${config.branchName}"]],
+      doGenerateSubmoduleConfigurations: false,
+      extensions: [
+        [$class: 'CleanBeforeCheckout'],
+        [$class: 'PruneStaleBranch'],
+        [$class: 'RelativeTargetDirectory', relativeTargetDir: "${config.subDirectory}"]],
+      submoduleCfg: [],
+      userRemoteConfigs: [[url: "${config.repoUrl}", credentialsId: "${config.repoCredentials}"]]])
+  }
+}
+
+// Creates a checkout stage with the following parameters
+// stageName
 // repoUrl
 // repoCredentials
 def checkoutCurrentBranch(body) {
@@ -50,3 +105,5 @@ def checkoutCurrentBranch(body) {
       userRemoteConfigs: [[url: "${config.repoUrl}", credentialsId: "${config.repoCredentials}"]]])
   }
 }
+
+
