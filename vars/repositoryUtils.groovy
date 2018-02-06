@@ -41,7 +41,6 @@ def checkoutBranch(body) {
 
   stage("${config.stageName}") {
     echo "Checkout branch: ${config.branchName}"
-    echo "pipelineLibrary@master"
 
     checkout([
       $class: 'GitSCM',
@@ -67,7 +66,6 @@ def checkoutBranchToSubdir(body) {
 
   stage("${config.stageName}") {
     echo "Checkout branch: ${config.branchName}"
-    echo "pipelineLibrary@master"
 
     checkout([
       $class: 'GitSCM',
