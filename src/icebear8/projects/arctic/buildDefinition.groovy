@@ -50,3 +50,5 @@ def buildMethod(projectSettings) {
     }
   }
 }
+
+return this
