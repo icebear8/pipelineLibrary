@@ -1,4 +1,4 @@
-package icebear8.docker
+package icebear8.docker;
 
 def getTagLatest() {
   return "latest"
