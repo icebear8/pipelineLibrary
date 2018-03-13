@@ -2,10 +2,8 @@
 
 def buildMethod(projectSettings) {
   def tempMethod = "buildMethod"
-  def packagePathToExecute = "icebear8.projects.arctic.buildDefinition"
+  def packagePathToExecute = "icebear8.projects.arctic.BuildInstructions"
   
   def cl = Class.forName("${packagePathToExecute}")
-
-  def buildDefinition = new cl()
-  buildDefinition."${tempMethod}"(projectSettings)
+  cl."${tempMethod}"(projectSettings)
 }
