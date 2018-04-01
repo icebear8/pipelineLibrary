@@ -1,7 +1,7 @@
 #!/usr/bin/env groovy
 
 def buildMethod(projectSettings) {
-  def p = "Arctic"
-  def instructions = new icebear8.projects."${p}"()
+  def p = "icebear8.projects.Arctic()"
+  def instructions = new "${p}"
   instructions.buildMethod(projectSettings)
 }
