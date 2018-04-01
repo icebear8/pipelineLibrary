@@ -2,8 +2,18 @@
 
 def buildMethod(projectSettings) {
 
-  projectSettings = new icebear8.projects.arctic.BuildSettings();
-  projectSettings.getBuildTriggerSettings()
+  def triggers = []
+
+  if (repositoryUtils.isLatestBranch() == true) {
+    triggers << cron('H 15 * * *')
+  }
+  
+  properties([
+    pipelineTriggers(triggers),
+    buildDiscarder(logRotator(
+      artifactDaysToKeepStr: '5', artifactNumToKeepStr: '5',
+      numToKeepStr: '5', daysToKeepStr: '5'))
+  ])
 
   def branchNameParameter = "*/${buildUtils.getCurrentBuildBranch()}"
   
