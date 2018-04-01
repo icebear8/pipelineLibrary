@@ -3,7 +3,7 @@
 def buildMethod(projectSettings) {
 
   projectSettings = new icebear8.projects.arctic.BuildSettings();
-  projectSettings.getProperties()
+  projectSettings.getBuildTriggerSettings()
 
   def branchNameParameter = "*/${buildUtils.getCurrentBuildBranch()}"
   

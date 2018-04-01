@@ -2,7 +2,8 @@
 
 package icebear8.projects.arctic;
 
-def getProperties() {
+def getBuildTriggerSettings() {
+
   def triggers = []
 
   if (repositoryUtils.isLatestBranch() == true) {
