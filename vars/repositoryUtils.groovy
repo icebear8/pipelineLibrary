@@ -44,7 +44,7 @@ def checkoutBranch(body) {
 
     checkout([
       $class: 'GitSCM',
-      branches: [[name: "*/${config.branchName}"]],
+      branches: [[name: "${config.branchName}"]],
       doGenerateSubmoduleConfigurations: false,
       extensions: [[$class: 'CleanBeforeCheckout'], [$class: 'PruneStaleBranch']],
       submoduleCfg: [],
@@ -69,7 +69,7 @@ def checkoutBranchToSubdir(body) {
 
     checkout([
       $class: 'GitSCM',
-      branches: [[name: "*/${config.branchName}"]],
+      branches: [[name: "${config.branchName}"]],
       doGenerateSubmoduleConfigurations: false,
       extensions: [
         [$class: 'CleanBeforeCheckout'],
