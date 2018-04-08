@@ -42,7 +42,7 @@ def evaluateReleaseTag(releaseBranch, imageName) {
   }
 
   def branchTag = releaseBranch.substring(indexOfImage + imageName.length() + 1) // +1 because of additional sign between image id and release tag
-  return branchTag + "-b${buildUtils.getCurrentBuildNumber()}"
+  return branchTag
 }
 
 def isImageProcessingRequired(imageName) {
