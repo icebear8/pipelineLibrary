@@ -50,9 +50,19 @@ def isImageProcessingRequired(imageName, imageList) {
   // Otherwise all images are built
   
   for (itImage in imageList) {
+    echo "Loop image: ${itImage}"
     if (repositoryUtils.containsCurrentBranch(itImage) == true) {
+      echo "Branch contains image name: ${itImage}"
       // The branch name contains one of the image names
       // Check whether the current image is the one to build
+      
+      if (repositoryUtils.containsCurrentBranch(imageName) == true) {
+        echo "Image ${imageName} has to be built"
+      }
+      else {
+        echo "Image ${imageName} will NOT be built"
+      }
+      
       return repositoryUtils.containsCurrentBranch(imageName)
     }
   }
