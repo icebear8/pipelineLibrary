@@ -45,25 +45,25 @@ def evaluateReleaseTag(releaseBranch, imageName) {
   return branchTag
 }
 
-def isImageProcessingRequired(imageName, imageList) {
+def isImageProcessingRequired(currentImageName, jobList) {
   // If the current branch contains an image name, only this image is built
   // Otherwise all images are built
   
-  for (itImage in imageList) {
-    echo "Loop image: ${itImage}"
-    if (repositoryUtils.containsCurrentBranch(itImage) == true) {
-      echo "Branch contains image name: ${itImage}"
+  for (itImageJob in jobList) {
+    echo "Loop image: ${itImageJob.imageName}"
+    if (repositoryUtils.containsCurrentBranch(itImageJob.imageName) == true) {
+      echo "Branch contains image name: ${itImageJob.imageName}"
       // The branch name contains one of the image names
       // Check whether the current image is the one to build
       
-      if (repositoryUtils.containsCurrentBranch(imageName) == true) {
-        echo "Image ${imageName} has to be built"
+      if (repositoryUtils.containsCurrentBranch(currentImageName) == true) {
+        echo "Image ${currentImageName} has to be built"
       }
       else {
-        echo "Image ${imageName} will NOT be built"
+        echo "Image ${currentImageName} will NOT be built"
       }
       
-      return repositoryUtils.containsCurrentBranch(imageName)
+      return repositoryUtils.containsCurrentBranch(currentImageName)
     }
   }
   
