@@ -14,7 +14,7 @@ def setupBuildTasks(body) {
   def buildTasks = [:]
 
   for(itJob in config.buildJobs) {
-    if (utils.isImageProcessingRequired(itJob.imageName)) {
+    if (utils.isImageProcessingRequired(itJob.imageName, config.buildJobs)) {
       buildTasks[itJob.imageName] = dockerBuild.buildImage(config.dockerRegistryUser, itJob.imageName, itJob.dockerfilePath)
     }
   }
@@ -37,7 +37,7 @@ def setupPushTasks(body) {
   def pushTasks = [:]
 
   for(itJob in config.buildJobs) {
-    if (utils.isImageProcessingRequired(itJob.imageName)) {
+    if (utils.isImageProcessingRequired(itJob.imageName, config.buildJobs)) {
       pushTasks[itJob.imageName] = dockerPush.pushImage(config.dockerRegistryUser, itJob.imageName)
     }
   }
@@ -60,7 +60,7 @@ def setupRemoveTasks(body) {
   def removeTasks = [:]
 
   for(itJob in config.buildJobs) {
-    if (utils.isImageProcessingRequired(itJob.imageName)) {
+    if (utils.isImageProcessingRequired(itJob.imageName, config.buildJobs)) {
       removeTasks[itJob.imageName] = dockerRemove.removeImage(config.dockerRegistryUser, itJob.imageName)
     }
   }

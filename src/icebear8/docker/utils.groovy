@@ -45,11 +45,18 @@ def evaluateReleaseTag(releaseBranch, imageName) {
   return branchTag
 }
 
-def isImageProcessingRequired(imageName) {
-  // for release or stable branches only process if image name is mentioned in the branch name
-  if ((repositoryUtils.isStableBranch() == true) || (repositoryUtils.isReleaseBranch() == true)) {
-    return repositoryUtils.containsCurrentBranch(imageName)
+def isImageProcessingRequired(currentImageName, jobList) {
+  // If the current branch contains an image name, only this image is built
+  // Otherwise all images are built
+  
+  for (itImageJob in jobList) {
+    if (repositoryUtils.containsCurrentBranch(itImageJob.imageName) == true) {
+      // The branch name contains one of the image names
+      // Check whether the current image is the one to build
+      return repositoryUtils.containsCurrentBranch(currentImageName)
+    }
   }
-
+  
+  // Branch does not contain an image name => build all images
   return true
 }
