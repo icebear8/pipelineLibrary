@@ -26,22 +26,22 @@ def evaluateRemoteTag(imageName) {
     remoteTag = getTagStable()
   }
   else if (repositoryUtils.isReleaseBranch() == true) {
-    def releaseTag = evaluateReleaseTag(buildUtils.getCurrentBuildBranch(), imageName)
-    remoteTag = releaseTag != null ? releaseTag : getTagLatest()
+    def releaseTag = evaluateReleaseTag(repositoryUtils.getAvailableTagName(), imageName)
+    remoteTag = releaseTag != null ? releaseTag : getTagBuild()
   }
 
   return remoteTag
 }
 
-def evaluateReleaseTag(releaseBranch, imageName) {
-  def indexOfImage = releaseBranch.indexOf(imageName)
+def evaluateReleaseTag(releaseTag, imageName) {
+  def indexOfImage = releaseTag.indexOf(imageName)
 
   if (indexOfImage < 0)
   {
     return null // exit if no valid release tag could be found
   }
 
-  def branchTag = releaseBranch.substring(indexOfImage + imageName.length() + 1) // +1 because of additional sign between image id and release tag
+  def branchTag = releaseTag.substring(indexOfImage + imageName.length() + 1) // +1 because of additional sign between image id and release tag
   return branchTag
 }
 
