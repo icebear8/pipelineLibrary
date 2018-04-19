@@ -27,6 +27,30 @@ def containsCurrentBranch(name) {
   return buildUtils.getCurrentBuildBranch().contains("${name}")
 }
 
+// Returns the current git tag if available
+// If there is no tag, null is returned
+def getAvailableTagName() {
+    commit = getCurrentCommitId()
+    if (commit) {
+        desc = sh(script: "git describe --tags ${commit}", returnStdout: true)?.trim()
+        if (isValidTag(desc)) {
+            return desc
+        }
+    }
+    return null
+}
+ 
+def getCurrentCommitId() {
+    return sh(script: 'git rev-parse HEAD', returnStdout: true)?.trim()
+}
+ 
+def isValidTag(desc) {
+    match = desc =~ /.+-[0-9]+-g[0-9A-Fa-f]{6,}$/
+    result = !match
+    match = null // prevent serialisation
+    return result
+}
+
 // Creates a checkout stage with the following parameters
 // stageName
 // branchName
