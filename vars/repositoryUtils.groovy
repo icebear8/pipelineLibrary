@@ -1,26 +1,18 @@
 
-def getBranchLatest() {
-  return "master"
-}
-
-def getBranchStable() {
-  return "stable"
-}
-
 def getBranchRelease() {
   return "release"
 }
 
-def isLatestBranch() {
-  return buildUtils.getCurrentBuildBranch().contains(getBranchLatest())
+def getBranchMain() {
+  return "master"
 }
 
 def isReleaseBranch() {
   return buildUtils.getCurrentBuildBranch().contains(getBranchRelease())
 }
 
-def isStableBranch() {
-  return buildUtils.getCurrentBuildBranch().contains(getBranchStable())
+def isMainBranch() {
+  return buildUtils.getCurrentBuildBranch().contains(getBranchMain())
 }
 
 def containsCurrentBranch(name) {
