@@ -5,13 +5,16 @@ def removeImage(user, imageName) {
 
   def imageId = "${user}/${imageName}"
   def localTag = utils.evaluateJobBuildTag()
-  def remoteTag = utils.evaluateRemoteTag(imageName)
+  def remoteTags = utils.evaluateRemoteTags(imageName)
 
   return {
     stage("Remove image ${imageId}") {
-      echo "Remove image: ${imageId}, tags: ${localTag}, ${remoteTag}"
+      echo "Remove image: ${imageId}, tags: ${localTag}, ${remoteTags}"
       sh "docker rmi ${imageId}:${localTag}"
-      sh "docker rmi ${imageId}:${remoteTag}"
+      
+      remoteTags.each {
+        sh "docker rmi ${imageId}:${it}"
+      }     
     }
   }
 }

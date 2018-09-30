@@ -4,13 +4,15 @@ def pushImage(user, imageName) {
   def utils = new icebear8.docker.utils()
 
   def imageId = "${user}/${imageName}:${utils.evaluateJobBuildTag()}"
-  def remoteTag = utils.evaluateRemoteTag(imageName)
+  def remoteTags = utils.evaluateRemoteTags(imageName)
 
   return {
-    stage("Push image ${imageId} to ${remoteTag}") {
-      echo "Push image: ${imageId} to remote with tag ${remoteTag}"
+    stage("Push image ${imageId}") {
+      echo "Push image: ${imageId} to remote with tag ${remoteTags}"
 
-      docker.image("${imageId}").push("${remoteTag}")
+      remoteTags.each {
+        docker.image("${imageId}").push("${it}")
+      }
     }
   }
 }

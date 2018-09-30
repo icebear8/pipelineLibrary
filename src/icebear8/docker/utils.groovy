@@ -33,6 +33,22 @@ def evaluateRemoteTag(imageName) {
   return remoteTag
 }
 
+def evaluateRemoteTags(imageName) {
+  def remoteTags []
+  def remoteTags.add(getTagBuild())
+
+  if (repositoryUtils.isReleaseBranch() == true) {
+    def releaseTag = evaluateReleaseTag(repositoryUtils.getAvailableTagName(), imageName)
+    
+    if (releaseTag != null) {
+      remoteTags.add(getTagLatest())
+      remoteTags.add(releaseTag)
+    }
+  }
+
+  return remoteTags
+}
+
 def evaluateReleaseTag(releaseTag, imageName) {
   def indexOfImage = releaseTag.indexOf(imageName)
 
