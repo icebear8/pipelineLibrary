@@ -13,7 +13,7 @@ def getJobBuildTriggers(body) {
   switch (config.projectId)
   {
     default:
-      if (repositoryUtils.isLatestBranch() == true) {
+      if (repositoryUtils.isMainBranch() == true) {
         buildTriggers << cron('H 15 * * *')
       }
     break

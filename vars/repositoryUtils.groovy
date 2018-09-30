@@ -3,8 +3,16 @@ def getBranchRelease() {
   return "release"
 }
 
+def getBranchMain() {
+  return "master"
+}
+
 def isReleaseBranch() {
   return buildUtils.getCurrentBuildBranch().contains(getBranchRelease())
+}
+
+def isMainBranch() {
+  return buildUtils.getCurrentBuildBranch().contains(getBranchMain())
 }
 
 def containsCurrentBranch(name) {
