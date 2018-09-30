@@ -34,7 +34,7 @@ def evaluateRemoteTag(imageName) {
 }
 
 def evaluateRemoteTags(imageName) {
-  def remoteTags []
+  def remoteTags = []
   remoteTags.add(getTagBuild())
 
   if (repositoryUtils.isReleaseBranch() == true) {
