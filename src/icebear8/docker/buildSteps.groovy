@@ -20,7 +20,7 @@ def buildImage(user, imageName, dockerFilePath) {
 }
 
 def isRebuildRequired() {
-  if ((repositoryUtils.isLatestBranch() == true) || (repositoryUtils.isStableBranch() == true) || (repositoryUtils.isReleaseBranch() == true)) {
+  if (repositoryUtils.isReleaseBranch() == true) {
     return true
   }
 

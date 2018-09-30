@@ -4,33 +4,12 @@ def getTagLatest() {
   return "latest"
 }
 
-def getTagStable() {
-  return "stable"
-}
-
 def getTagBuild() {
   return "build"
 }
 
 def evaluateJobBuildTag() {
   return "${buildUtils.getCurrentBuildBranch()}-b${buildUtils.getCurrentBuildNumber()}".replaceAll('/', '-')
-}
-
-def evaluateRemoteTag(imageName) {
-  def remoteTag = getTagBuild()
-
-  if (repositoryUtils.isLatestBranch() == true) {
-    remoteTag = getTagLatest()
-  }
-  else if (repositoryUtils.isStableBranch() == true) {
-    remoteTag = getTagStable()
-  }
-  else if (repositoryUtils.isReleaseBranch() == true) {
-    def releaseTag = evaluateReleaseTag(repositoryUtils.getAvailableTagName(), imageName)
-    remoteTag = releaseTag != null ? releaseTag : getTagBuild()
-  }
-
-  return remoteTag
 }
 
 def evaluateRemoteTags(imageName) {
