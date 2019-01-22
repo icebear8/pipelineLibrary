@@ -22,7 +22,7 @@ def setupBuildTasks(body) {
   return buildTasks
 }
 
-// Prepares multiple docker images push tasks wity parameters
+// Prepares multiple docker images push tasks with parameters
 // dockerRegistryUser
 // buildJobs
 def setupPushTasks(body) {
@@ -45,7 +45,7 @@ def setupPushTasks(body) {
   return pushTasks
 }
 
-// Prepares multiple docker images remove tasks wity parameters
+// Prepares multiple docker images remove tasks with parameters
 // dockerRegistryUser
 // buildJobs
 def setupRemoveTasks(body) {
@@ -65,5 +65,20 @@ def setupRemoveTasks(body) {
     }
   }
 
+  return removeTasks
+}
+
+// Prepare cleanup task to remove all unused images
+def setupClenupAllUnusedTask(body) {
+  def config = [:]
+  body.resolveStrategy = Closure.DELEGATE_FIRST
+  body.delegate = config
+  body()
+  
+  def removeTasks = [:]
+  
+  def dockerRemove = new icebear8.docker.removeSteps()
+  removeTasks["cleanup"] = dockerRemove.removeAllUnusedImages()
+  
   return removeTasks
 }

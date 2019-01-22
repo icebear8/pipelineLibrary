@@ -1,3 +1,5 @@
+#!/usr/bin/env groovy
+
 package icebear8.docker;
 
 def removeImage(user, imageName) {
@@ -15,6 +17,14 @@ def removeImage(user, imageName) {
       remoteTags.each {
         sh "docker rmi ${imageId}:${it}"
       }     
+    }
+  }
+}
+
+def removeAllUnusedImages() {
+  return {
+    stage("Remove all unused images") {
+      sh "docker system prune --force --all"
     }
   }
 }
