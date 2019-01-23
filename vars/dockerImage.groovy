@@ -78,7 +78,8 @@ def setupClenupAllUnusedTask(body) {
   def removeTasks = [:]
   
   def dockerRemove = new icebear8.docker.removeSteps()
-  removeTasks["cleanup"] = dockerRemove.removeAllUnusedImages()
+  removeTasks["images"] = dockerRemove.removeAllUnusedImages()
+  removeTasks["containers"] = dockerRemove.removeUnusedContainers()
   
   return removeTasks
 }

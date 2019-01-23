@@ -28,3 +28,11 @@ def removeAllUnusedImages() {
     }
   }
 }
+
+def removeUnusedContainers() {
+  return {
+    stage("Remove stopped containers") {
+      sh "docker container prune --force"
+    }
+  }
+}
