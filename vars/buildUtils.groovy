@@ -3,7 +3,7 @@ def getCurrentBuildBranch() {
   if (env.BRANCH_NAME != null) {
     return env.BRANCH_NAME
   }
-  return repositoryUtils.getBranchLatest()
+  return repositoryUtils.getBranchMain()
 }
 
 def getCurrentBuildNumber() {
