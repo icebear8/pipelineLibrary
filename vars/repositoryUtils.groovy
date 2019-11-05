@@ -31,11 +31,11 @@ def getAvailableTagName() {
     }
     return null
 }
- 
+
 def getCurrentCommitId() {
     return sh(script: 'git rev-parse HEAD', returnStdout: true)?.trim()
 }
- 
+
 def isValidTag(desc) {
     match = desc =~ /.+-[0-9]+-g[0-9A-Fa-f]{6,}$/
     result = !match
@@ -62,7 +62,7 @@ def checkoutBranch(body) {
       $class: 'GitSCM',
       branches: [[name: "${config.branchName}"]],
       doGenerateSubmoduleConfigurations: false,
-      extensions: [[$class: 'CleanBeforeCheckout'], [$class: 'PruneStaleBranch']],
+      extensions: [[$class: 'CloneOption', depth: 1, noTags: false, reference: '', shallow: true], [$class: 'CleanBeforeCheckout'], [$class: 'PruneStaleBranch']],
       submoduleCfg: [],
       userRemoteConfigs: [[url: "${config.repoUrl}", credentialsId: "${config.repoCredentials}"]]])
   }
@@ -119,5 +119,3 @@ def checkoutCurrentBranch(body) {
       userRemoteConfigs: [[url: "${config.repoUrl}", credentialsId: "${config.repoCredentials}"]]])
   }
 }
-
-
